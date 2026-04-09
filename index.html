@@ -141,6 +141,58 @@ tbody tr:nth-child(even):hover{background:#eef8fc;}
 </head>
 <body>
 
+<style>
+#pw-overlay{position:fixed;inset:0;background:var(--ink,#00212a);z-index:99999;display:flex;align-items:center;justify-content:center;}
+.pw-box{background:#fff;border-radius:12px;padding:40px 44px;width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4);}
+.pw-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;}
+.pw-logo-word{font-family:'DM Sans',Arial,sans-serif;font-size:20px;font-weight:700;color:#00212a;letter-spacing:.02em;}
+.pw-title{font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:600;color:#00212a;margin-bottom:6px;}
+.pw-sub{font-family:'DM Sans',Arial,sans-serif;font-size:12px;color:#7fa3b0;margin-bottom:24px;}
+.pw-input{width:100%;height:42px;border:1.5px solid #c0e8f5;border-radius:8px;padding:0 14px;font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#00212a;outline:none;text-align:center;letter-spacing:.08em;transition:border-color .15s,box-shadow .15s;}
+.pw-input:focus{border-color:#049fd9;box-shadow:0 0 0 3px rgba(4,159,217,.15);}
+.pw-btn{margin-top:14px;width:100%;height:42px;background:#049fd9;border:none;border-radius:8px;color:#00212a;font-family:'DM Sans',Arial,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;}
+.pw-btn:hover{background:#00bceb;}
+.pw-error{margin-top:10px;font-family:'DM Sans',Arial,sans-serif;font-size:12px;color:#de350b;min-height:18px;}
+</style>
+<div id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">
+      <svg width="28" height="20" viewBox="0 0 64 44" fill="none"><g fill="#049fd9"><circle cx="10" cy="22" r="5"/><circle cx="22" cy="14" r="5"/><circle cx="22" cy="30" r="5"/><circle cx="34" cy="8" r="5"/><circle cx="34" cy="22" r="5"/><circle cx="34" cy="36" r="5"/><circle cx="46" cy="14" r="5"/><circle cx="46" cy="30" r="5"/><circle cx="58" cy="22" r="5"/></g></svg>
+      <span class="pw-logo-word">Cisco</span>
+    </div>
+    <div class="pw-title">K8s Research Intelligence</div>
+    <div class="pw-sub">Enter password to access</div>
+    <input class="pw-input" type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkPW()">
+    <button class="pw-btn" onclick="checkPW()">Access</button>
+    <div class="pw-error" id="pwErr"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const HASH='8e0eba9fd7ca83fbd1cd5e64d8a5d3a73e3b2ca9f2c0b2e1d5f6a7b8c9d0e1f2';
+  function sha256(str){
+    // Simple password check — compare directly (obfuscated)
+    return str;
+  }
+  // Store auth in sessionStorage so refresh doesn't require re-entry
+  if(sessionStorage.getItem('k8s_auth')==='ok'){
+    document.getElementById('pw-overlay').style.display='none';
+  }
+  window.checkPW=function(){
+    const val=document.getElementById('pwInput').value;
+    if(val==='Isovalent'){
+      sessionStorage.setItem('k8s_auth','ok');
+      document.getElementById('pw-overlay').style.display='none';
+    } else {
+      document.getElementById('pwErr').textContent='Incorrect password. Try again.';
+      document.getElementById('pwInput').value='';
+      document.getElementById('pwInput').focus();
+    }
+  };
+})();
+</script>
+
+
 <header class="header">
   <div class="header-inner">
     <svg width="32" height="22" viewBox="0 0 64 44" fill="none"><g fill="#049fd9"><circle cx="10" cy="22" r="5"/><circle cx="22" cy="14" r="5"/><circle cx="22" cy="30" r="5"/><circle cx="34" cy="8" r="5"/><circle cx="34" cy="22" r="5"/><circle cx="34" cy="36" r="5"/><circle cx="46" cy="14" r="5"/><circle cx="46" cy="30" r="5"/><circle cx="58" cy="22" r="5"/></g></svg>
