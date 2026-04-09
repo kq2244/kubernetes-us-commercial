@@ -296,10 +296,11 @@ function resetDef(){COLS.forEach(([k])=>vis[k]=true);buildCP();renderHead();rend
 
 function renderHead(){
   const visCols=COLS.filter(([k])=>vis[k]);
-  const wideKeys=new Set(['verdict','confidence']);
+  const wideKeys=new Set(['verdict']);
+  const extraWide=new Set(['confidence']);
   document.getElementById('thead').innerHTML=visCols.map(([k,l])=>{
     const sc=sCol===k?(sDir===1?' sa':' sd2'):'';
-    const w=wideKeys.has(k)?' style="min-width:260px;max-width:320px;"':'';
+    const w=wideKeys.has(k)?' style="min-width:260px;max-width:320px;"':extraWide.has(k)?' style="min-width:360px;max-width:420px;"':'';
     return `<th class="${sc}"${w} onclick="sortBy('${k}')" data-col="${k}">${esc(l)}<span class="si2"> &#8645;</span></th>`;
   }).join('');
   document.getElementById('stCols').textContent=visCols.length;
