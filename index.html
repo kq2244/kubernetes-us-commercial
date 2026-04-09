@@ -296,9 +296,11 @@ function resetDef(){COLS.forEach(([k])=>vis[k]=true);buildCP();renderHead();rend
 
 function renderHead(){
   const visCols=COLS.filter(([k])=>vis[k]);
+  const wideKeys=new Set(['verdict','confidence']);
   document.getElementById('thead').innerHTML=visCols.map(([k,l])=>{
     const sc=sCol===k?(sDir===1?' sa':' sd2'):'';
-    return `<th class="${sc}" onclick="sortBy('${k}')" data-col="${k}">${esc(l)}<span class="si2"> &#8645;</span></th>`;
+    const w=wideKeys.has(k)?' style="min-width:260px;max-width:320px;"':'';
+    return `<th class="${sc}"${w} onclick="sortBy('${k}')" data-col="${k}">${esc(l)}<span class="si2"> &#8645;</span></th>`;
   }).join('');
   document.getElementById('stCols').textContent=visCols.length;
 }
@@ -332,8 +334,8 @@ function sortBy(col){sDir=sCol===col?sDir*-1:1;sCol=col;document.querySelectorAl
 function cellHTML(k,val){
   if(val===null||val===undefined)val='';val=String(val);
   if(k==='company')return `<td style="font-weight:500;color:var(--blue)">${esc(val)||'—'}</td>`;
-  if(k==='verdict'){const c=val==='Yes'?'v-Yes':val==='Likely'?'v-Likely':val.startsWith('Probably')?'v-Probably':'v-Insufficient';return `<td><span class="vb ${c}">${esc(val)||'—'}</span></td>`;}
-  if(k==='confidence'){const c='c-'+val;return `<td><span class="cd ${c}">${esc(val)||'—'}</span></td>`;}
+  if(k==='verdict'){const c=val==='Yes'?'v-Yes':val==='Likely'?'v-Likely':val.startsWith('Probably')?'v-Probably':'v-Insufficient';return `<td style="min-width:220px"><span class="vb ${c}">${esc(val)||'—'}</span></td>`;}
+  if(k==='confidence'){const c='c-'+val;return `<td style="min-width:100px"><span class="cd ${c}">${esc(val)||'—'}</span></td>`;}
   if(k==='hubspotRank')return val?`<td><span class="hb">${esc(val)}</span></td>`:'<td style="color:var(--tm)">—</td>';
   if(k==='sl3')return `<td class="mono">${esc(val)||'—'}</td>`;
   if(k==='sl5')return `<td class="mono" style="font-size:10.5px">${esc(val)||'—'}</td>`;
