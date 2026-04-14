@@ -305,7 +305,7 @@ const keyToLabel={};
 COLS.forEach(([k,l])=>keyToLabel[k]=l);
 
 let filtered=[...DATA];
-let page=1,ps=50,sCol='company',sDir=1;
+let page=1,ps=50,sCol='verdict',sDir=1;
 let vis={};
 COLS.forEach(([k])=>vis[k]=false);
 ['sl3','sl5','company','verdict','confidence','k8sFlavor','contact','hubspotRank'].forEach(k=>vis[k]=true);
@@ -384,11 +384,11 @@ function doSort(){
 }
 function sortBy(col){sDir=sCol===col?sDir*-1:1;sCol=col;document.querySelectorAll('th').forEach(th=>{th.classList.remove('sa','sd2');if(th.dataset.col===col)th.classList.add(sDir===1?'sa':'sd2');});doSort();render();}
 
-function cellHTML(k,val){
+function cellHTML(k,val,r){
   if(val===null||val===undefined)val='';val=String(val);
   if(k==='company')return `<td style="font-weight:500;color:var(--blue)">${esc(val)||'—'}</td>`;
-  if(k==='verdict'){const c=val==='Yes'?'v-Yes':val==='Likely'?'v-Likely':val.startsWith('Probably')?'v-Probably':'v-Insufficient';return `<td style="min-width:220px"><span class="vb ${c}">${esc(val)||'—'}</span></td>`;}
-  if(k==='confidence'){const c='c-'+val;return `<td style="min-width:100px"><span class="cd ${c}">${esc(val)||'—'}</span></td>`;}
+  if(k==='verdict'){const c=val==='Yes'?'v-Yes':val==='Likely'?'v-Likely':val.startsWith('Probably')?'v-Probably':'v-Insufficient';return `<td style="min-width:100px"><span class="vb ${c}">${esc(val)||'—'}</span></td>`;}
+  if(k==='confidence'){const c='c-'+val;const just=r&&r['confJustification']?`<div style="font-size:10px;color:var(--ts);margin-top:3px;white-space:normal;line-height:1.4">${esc(r['confJustification'])}</div>`:'';return `<td style="min-width:120px;max-width:240px">${'<span class="cd '+c+'">'+(esc(val)||'—')+'</span>'}${just}</td>`;}
   if(k==='hubspotRank')return val?`<td><span class="hb">${esc(val)}</span></td>`:'<td style="color:var(--tm)">—</td>';
   if(k==='sl3')return `<td class="mono">${esc(val)||'—'}</td>`;
   if(k==='sl5')return `<td class="mono" style="font-size:10.5px">${esc(val)||'—'}</td>`;
@@ -423,7 +423,7 @@ function render(){
 
   const visCols=COLS.filter(([k])=>vis[k]);
   document.getElementById('tbody').innerHTML=slice.map(r=>
-    '<tr>'+visCols.map(([k])=>cellHTML(k,r[k])).join('')+'</tr>'
+    '<tr>'+visCols.map(([k])=>cellHTML(k,r[k],r)).join('')+'</tr>'
   ).join('');
   renderPag(pages);
 }
