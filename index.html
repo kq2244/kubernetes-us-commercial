@@ -80,13 +80,13 @@ table{
 }
 thead{background:var(--mid);}
 th{
-  padding:10px 12px;
+  padding:6px 8px;
   text-align:left;
-  font-size:9px;font-weight:700;
+  font-size:8.5px;font-weight:700;
   text-transform:uppercase;letter-spacing:.06em;
   color:#fff;
-  white-space:normal;word-break:break-word;
-  max-width:180px;min-width:90px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:140px;min-width:60px;
   cursor:pointer;user-select:none;
   line-height:1.35;vertical-align:top;
   border:1.5px solid rgba(255,255,255,.25);
@@ -307,7 +307,8 @@ COLS.forEach(([k,l])=>keyToLabel[k]=l);
 let filtered=[...DATA];
 let page=1,ps=50,sCol='company',sDir=1;
 let vis={};
-COLS.forEach(([k])=>vis[k]=true);
+COLS.forEach(([k])=>vis[k]=false);
+['sl3','sl5','company','verdict','confidence','k8sFlavor','contact','hubspotRank'].forEach(k=>vis[k]=true);
 
 const vOrd={'Yes':0,'Likely':1,'Insufficient Public Data':2,'Probably Not':3,'':9};
 const cOrd={'High':0,'Medium':1,'Low':2,'':9};
@@ -342,7 +343,8 @@ function buildCP(){
 function togCol(k,v){vis[k]=v;buildCP();renderHead();render();}
 function toggleCP(){document.getElementById('ov').classList.toggle('open');document.getElementById('cp').classList.toggle('open');buildCP();}
 function setAll(v){COLS.forEach(([k])=>vis[k]=v);buildCP();renderHead();render();}
-function resetDef(){COLS.forEach(([k])=>vis[k]=true);buildCP();renderHead();render();}
+function resetDef(){COLS.forEach(([k])=>vis[k]=false);
+['sl3','sl5','company','verdict','confidence','k8sFlavor','contact','hubspotRank'].forEach(k=>vis[k]=true);buildCP();renderHead();render();}
 
 function renderHead(){
   const visCols=COLS.filter(([k])=>vis[k]);
