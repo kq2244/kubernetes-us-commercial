@@ -316,12 +316,12 @@ COLS.forEach(([k])=>vis[k]=false);
 ['sl3','sl5','company','signal','k8sFlavor','contact','hubspotRank'].forEach(k=>vis[k]=true);
 
 const vOrd={'Yes':0,'Likely':1,'Insufficient Public Data':2,'Probably Not':3,'':9};
-const sOrd={'Strong Signal':0,'Medium Signal':1,'Needs Further Investigation':2,'':9};
+const sOrd={'Very Strong Prospect':0,'Good Prospect':1,'Needs Further Investigation':2,'':9};
 function getSignal(verdict, conf){
-  if(verdict==='Yes') return 'Strong Signal';
-  if(verdict==='Likely' && conf==='High') return 'Strong Signal';
-  if(verdict==='Likely' && (conf==='Medium'||conf==='Low')) return 'Medium Signal';
-  if(verdict==='Insufficient Public Data' && (conf==='High'||conf==='Medium')) return 'Medium Signal';
+  if(verdict==='Yes') return 'Very Strong Prospect';
+  if(verdict==='Likely' && conf==='High') return 'Very Strong Prospect';
+  if(verdict==='Likely' && (conf==='Medium'||conf==='Low')) return 'Good Prospect';
+  if(verdict==='Insufficient Public Data' && (conf==='High'||conf==='Medium')) return 'Good Prospect';
   if(verdict==='Insufficient Public Data' && conf==='Low') return 'Needs Further Investigation';
   if(verdict==='Probably Not') return 'Needs Further Investigation';
   return 'Needs Further Investigation';
@@ -404,7 +404,7 @@ function sortBy(col){sDir=sCol===col?sDir*-1:1;sCol=col;document.querySelectorAl
 function cellHTML(k,val,r){
   if(val===null||val===undefined)val='';val=String(val);
   if(k==='company')return `<td style="font-weight:500;color:var(--blue)">${esc(val)||'—'}</td>`;
-  if(k==='signal'){const cls=val==='Strong Signal'?'sig-strong':val==='Medium Signal'?'sig-medium':'sig-nfi';return `<td><span class="sig ${cls}">${esc(val)||'—'}</span></td>`;}
+  if(k==='signal'){const cls=val==='Very Strong Prospect'?'sig-strong':val==='Good Prospect'?'sig-medium':'sig-nfi';return `<td><span class="sig ${cls}">${esc(val)||'—'}</span></td>`;}
   if(k==='verdict'){const c=val==='Yes'?'v-Yes':val==='Likely'?'v-Likely':val.startsWith('Probably')?'v-Probably':'v-Insufficient';return `<td style="min-width:100px"><span class="vb ${c}">${esc(val)||'—'}</span></td>`;}
   if(k==='confidence'){const c='c-'+val;const just=r&&r['confJustification']?`<div style="font-size:10px;color:var(--ts);margin-top:3px;white-space:normal;line-height:1.4">${esc(r['confJustification'])}</div>`:'';return `<td style="min-width:120px;max-width:240px">${'<span class="cd '+c+'">'+(esc(val)||'—')+'</span>'}${just}</td>`;}
   if(k==='hubspotRank')return val?`<td><span class="hb">${esc(val)}</span></td>`:'<td style="color:var(--tm)">—</td>';
